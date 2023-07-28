@@ -17,3 +17,6 @@ migrate = Migrate(app, db)
 
 from routes import tourbieres
 app.register_blueprint(tourbieres.bp)
+
+from routes import reserves
+app.register_blueprint(reserves.bp)

@@ -6,9 +6,11 @@ from schemas.tourbieres import TourbieresSchema
 
 bp = Blueprint('tourbieres', __name__)
 
-@bp.route('/maroute', methods=['GET'])
+@bp.route('/tourbieres', methods=['GET'])
 def getTourbieres():
-    print(db)
+    tourbieres = Tourbieres.query.all()
+    schema = TourbieresSchema(many=True)
+    Obj = schema.dump(tourbieres)
 
-    return {"mes":"coucou"}
+    return jsonify(Obj)
 

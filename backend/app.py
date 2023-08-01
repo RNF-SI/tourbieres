@@ -20,3 +20,6 @@ app.register_blueprint(tourbieres.bp)
 
 from routes import reserves
 app.register_blueprint(reserves.bp)
+
+from routes import upt
+app.register_blueprint(upt.bp)

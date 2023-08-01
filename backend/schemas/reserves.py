@@ -1,6 +1,8 @@
 from app import ma
 
 from models.reserves import Reserves, SuiviSt, ContactSt, ActionSt, DetermSt
+from schemas.tourbieres import TourbieresSchema
+from schemas.upt import UptSchema
 
 class ReservesSchema(ma.SQLAlchemyAutoSchema) :
     class Meta :
@@ -10,6 +12,8 @@ class ReservesSchema(ma.SQLAlchemyAutoSchema) :
     contact = ma.Nested(lambda: ContactStSchema, many=False)
     actions = ma.Nested(lambda: ActionStSchema, many=False)
     determinations = ma.Nested(lambda: DetermStSchema, many=False)
+    tourbieres = ma.Nested(lambda: TourbieresSchema, many = True)
+    upts = ma.Nested(lambda: UptSchema, many = True)
 
 class SuiviStSchema(ma.SQLAlchemyAutoSchema) :
     class Meta :

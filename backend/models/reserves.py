@@ -1,6 +1,7 @@
 from app import db
 
 from models.nomenclature import Nomenclature
+from models.upt import Upt
 
 class Reserves(db.Model):
     __tablename__ = 't_reserves'
@@ -17,7 +18,8 @@ class Reserves(db.Model):
     contact = db.relationship("ContactSt", uselist=False, back_populates="reserve")
     actions = db.relationship("ActionSt", uselist=False, back_populates="reserve")
     determinations = db.relationship("DetermSt", uselist=False, back_populates="reserve")
-
+    tourbieres = db.relationship("Tourbieres", backref='reserve')
+    upts = db.relationship(Upt, backref='reserve')
 
 class SuiviSt(db.Model) :
     __tablename__ = 't_suivi_st'

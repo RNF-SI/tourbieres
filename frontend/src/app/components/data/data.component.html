@@ -1,1 +1,473 @@
-<p>data works!</p>
+<div [hidden]="!loadreserves" style="text-align: center;">
+    <div style="font-weight: bold;color: #007749;">Chargement des données...</div>
+    <br>
+    <app-loading-spinner></app-loading-spinner>
+</div>
+<div *ngIf="!loadreserves">
+    <div class="select">
+        <div class="row">
+            <div class="col-md-4 reserves">
+                <div class="mb-3">
+                    <label class="form-label">Filtres à appliquer sur les réserves</label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="filtreslisteReserves" [(ngModel)]="filtreslisteReserves_selected"
+                        (ngModelChange)="filterShow()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-4 tourbieres">
+                <div class="mb-3">
+                    <label class="form-label">Filtres à appliquer sur les tourbières</label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="filtreslisteTourbieres" [(ngModel)]="filtreslisteTourbieres_selected"
+                        (ngModelChange)="filterShow()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="row reserves filtres">
+            <div class="titre_section" *ngIf="filtreslisteReserves_selected.length > 0">
+                <h4>Filtres sur les réserves</h4>
+            </div>
+            <div class="col-md-2" *ngIf="showNbtourbieres">
+                <div class="mb-3">
+                    <label class="form-label" for="surf_min">Nombre de tourbières minimum</label>
+                    <input type="number" step="1" id="nb_tourb_min" class="form-control" name="nb_tourb_min"
+                        [(ngModel)]="query_nb_tourb_min" (ngModelChange)="filterReserve()" />
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showNbtourbieres">
+                <div class="mb-3">
+                    <label class="form-label" for="surf_max">Nombre de tourbières maximum</label>
+                    <input type="number" step="1" id="nb_tourb_max" class="form-control" name="nb_tourb_max"
+                        [(ngModel)]="query_nb_tourb_max" (ngModelChange)="filterReserve()" />
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showenjeux_st">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">{{enjeux_st.label}} <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip="{{enjeux_st.definition}}"></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="enjeux_st.items" [(ngModel)]="enjeux_st_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showModeDetermination">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Modes de détermination <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="mode_determination" [(ngModel)]="mode_determination_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showSuivisBiologiques">
+                <div class="mb-3">
+                    <label class="form-label">Suivis biologiques <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="suivis_biologiques" [(ngModel)]="suivis_biologiques_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showSuivisHydro">
+                <div class="mb-3">
+                    <label class="form-label">Suivis hydrologiques <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="suivis_hydro" [(ngModel)]="suivis_hydro_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showSuivisClimat">
+                <div class="mb-3">
+                    <label class="form-label">Suivis climatiques <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="suivis_climat" [(ngModel)]="suivis_climat_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showSuivisPhychi">
+                <div class="mb-3">
+                    <label class="form-label">Suivis physico-chimiques <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="suivis_phychi" [(ngModel)]="suivis_phychi_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showActions">
+                <div class="mb-3">
+                    <label class="form-label">Actions sur les tourbières <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="actions" [(ngModel)]="actions_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="row tourbieres filtres">
+            <div class="titre_section" *ngIf="filtreslisteTourbieres_selected.length > 0">
+                <h4>Filtres sur les tourbières</h4>
+                <span>Une réserve peut contenir plusieurs tourbières. Dès lors qu'au moins une de ses tourbières correspond aux critères définis, la réserve est affichée ici.</span>    
+                <br><br>
+            </div>
+            <div class="col-md-2" *ngIf="showSuptourbieres">
+                <div class="mb-3">
+                    <label class="form-label" for="surf_min">Superficie minimale d'une tourbière</label>
+                    <input type="number" step=".01" id="nb_tourb_min" class="form-control" name="nb_tourb_min"
+                        [(ngModel)]="query_sup_tourb_min" (ngModelChange)="filterReserve()" />
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showSuptourbieres">
+                <div class="mb-3">
+                    <label class="form-label" for="surf_max">Superficie maximale d'une tourbière</label>
+                    <input type="number" step=".01" id="nb_tourb_max" class="form-control" name="nb_tourb_max"
+                        [(ngModel)]="query_sup_tourb_max" (ngModelChange)="filterReserve()" />
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showActiviteT">
+                <div class="mb-3">
+                    <label class="form-label">Activité de la tourbière <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="activite_t" [(ngModel)]="activite_t_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showGeneseT">
+                <div class="mb-3">
+                    <label class="form-label">Genèse de la tourbière <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="genese_t" [(ngModel)]="genese_t_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showSourceEau">
+                <div class="mb-3">
+                    <label class="form-label">{{source_eau.label}} <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip="{{source_eau.definition}}"></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="source_eau.items" [(ngModel)]="source_eau_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showNiveauTrophique">
+                <div class="mb-3">
+                    <label class="form-label">{{niveau_trophique.label}} <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip="{{niveau_trophique.definition}}"></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="niveau_trophique.items" [(ngModel)]="niveau_trophique_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPh">
+                <div class="mb-3">
+                    <label class="form-label">{{ph.label}} <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip="{{ph.definition}}"></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="ph.items" [(ngModel)]="ph_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showTypeT">
+                <div class="mb-3">
+                    <label class="form-label">Type de tourbière <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="standardSelectSettings" [data]="type_t" [(ngModel)]="type_t_selected"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressions">
+                <div class="mb-3">
+                    <label class="form-label">Pression : Tourisme <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions.items" [(ngModel)]="tourisme"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressions">
+                <div class="mb-3">
+                    <label class="form-label">Pression : Incendies <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions.items" [(ngModel)]="incendie"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressions">
+                <div class="mb-3">
+                    <label class="form-label">Pression : Dérèglement hydrique <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions.items" [(ngModel)]="dereglement_hydrique"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressions">
+                <div class="mb-3">
+                    <label class="form-label">Pression : Sylviculture <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions.items" [(ngModel)]="sylviculture"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressions">
+                <div class="mb-3">
+                    <label class="form-label">Pression : Sur-enrichissement <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions.items" [(ngModel)]="surenrichissement"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressions">
+                <div class="mb-3">
+                    <label class="form-label">Pression : Pollution chimique <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions.items" [(ngModel)]="pollution"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressions">
+                <div class="mb-3">
+                    <label class="form-label">Pression : pastoralisme <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions.items" [(ngModel)]="pastoralisme"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressions">
+                <div class="mb-3">
+                    <label class="form-label">Pression : Perturbations climatiques <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions.items" [(ngModel)]="perturbation_climatique"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressionsEvol">
+                <div class="mb-3">
+                    <label class="form-label">Évolution pression : Tourisme <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions_evol.items" [(ngModel)]="tourisme_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressionsEvol">
+                <div class="mb-3">
+                    <label class="form-label">Évolution pression : Incendie <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions_evol.items" [(ngModel)]="incendie_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressionsEvol">
+                <div class="mb-3">
+                    <label class="form-label">Évolution pression : Dérèglement hydrique <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions_evol.items" [(ngModel)]="dereglement_hydrique_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressionsEvol">
+                <div class="mb-3">
+                    <label class="form-label">Évolution pression : Sylviculture <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions_evol.items" [(ngModel)]="sylviculture_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressionsEvol">
+                <div class="mb-3">
+                    <label class="form-label">Évolution pression : Sur-enrichissement <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions_evol.items" [(ngModel)]="surenrichissement_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressionsEvol">
+                <div class="mb-3">
+                    <label class="form-label">Évolution pression : Pollution chimique <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions_evol.items" [(ngModel)]="pollution_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressionsEvol">
+                <div class="mb-3">
+                    <label class="form-label">Évolution pression : Pastoralisme <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions_evol.items" [(ngModel)]="pastoralisme_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showPressionsEvol">
+                <div class="mb-3">
+                    <label class="form-label">Évolution pression : Perturbation climatique <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="pressions_evol.items" [(ngModel)]="perturbation_climatique_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            
+            <div class="col-md-2" *ngIf="showConservationBiologique">
+                <div class="mb-3">
+                    <label class="form-label">Etat de conservation biologique <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="etat_conservation.items" [(ngModel)]="etat_cons_biol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showConservationBiologique">
+                <div class="mb-3">
+                    <label class="form-label">Tendance de l'état biologique <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="etat_conservation_evol.items" [(ngModel)]="etat_cons_biol_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showConservationFonctionnel">
+                <div class="mb-3">
+                    <label class="form-label">Etat de conservation fonctionnel <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="etat_conservation.items" [(ngModel)]="etat_cons_fonc"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="showConservationFonctionnel">
+                <div class="mb-3">
+                    <label class="form-label">Tendance de l'état fonctionnel <fa-icon
+                            [icon]="['fas', 'circle-info']" matTooltip=""></fa-icon> </label>
+                    <ng-multiselect-dropdown [placeholder]="'Sélectionnez une/des option/s'"
+                        [settings]="nomenclatureSelectSettings" [data]="etat_conservation_evol.items" [(ngModel)]="etat_cons_fonc_evol"
+                        (ngModelChange)="filterReserve()">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: right; font-weight: bold;color: #007749;">
+            Nombre de réserves filtrées : {{rns_filtered.length}}
+        </div>
+    </div>
+
+    <div>
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <!-- <ng-container matColumnDef="lien">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element"> <a style="color:#2b8a5c" role="button"
+                    routerLink="/reserve/{{element.id_local}}">
+                    <i class="fas fa-eye"></i></a> </td>
+        </ng-container> -->
+            <ng-container matColumnDef="header-row-first-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">
+                    Réserve Naturelle
+                </th>
+            </ng-container>
+
+            <!-- Header row second group -->
+            <ng-container matColumnDef="header-row-second-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Informations contact </th>
+            </ng-container>
+
+            <ng-container matColumnDef="id_local">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID RNF </th>
+                <td mat-cell *matCellDef="let element"> {{element.id_local}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="id_inpn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID INPN </th>
+                <td mat-cell *matCellDef="let element"> {{element.id_inpn}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nom_site">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom du site </th>
+                <td mat-cell *matCellDef="let element"> {{element.type_rn}} {{element.jonction_nom}}{{element.nom_site}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="contact_nom">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
+                <td mat-cell *matCellDef="let element"> {{element.contact.contact_prenom | titlecase}}
+                    {{element.contact.contact_nom | titlecase}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="contact_emploi">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fonction </th>
+                <td mat-cell *matCellDef="let element"> {{element.contact.contact_emploi}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="contact_mail">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Mail </th>
+                <td mat-cell *matCellDef="let element"> {{element.contact.contact_mail}}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['header-row-first-group', 'header-row-second-group']"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator #myPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+        </mat-paginator>
+        <br>
+        <div style="text-align: right; padding-right: 5%;">
+            <!-- <button *ngIf="isAdminRn" type="button" class="btn black white-text" routerLink="/ajouter-reserve">
+            Ajouter une réserve
+        </button> -->
+            <button type="button" class="btn green white-text" (click)="exportAsXlsx()" style="margin-left: 20px;">
+                <i class="far fa-file-excel"></i> Exporter au format XLSX
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 export const AppConfig = {
     "ID_APPLICATION_GEONATURE": 5,
     "API_ENDPOINT": "https://geonature.reserves-naturelles.org/api",
+    "API_APP": "http://localhost:5088",
     "appName": "Tourbières RNF",
     "appTitle": "Tourbières des réserves naturelles",
     "appSubTitle": "Découvrez les tourbières du réseau",

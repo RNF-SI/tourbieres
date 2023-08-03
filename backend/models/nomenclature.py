@@ -8,6 +8,7 @@ class BibNomenclatureType(db.Model):
     mnemonique = db.Column(db.String(255), nullable=False)
     label = db.Column(db.String(255))
     definition = db.Column(db.String(255))
+    items = db.relationship("Nomenclature", backref="type")
 
 class Nomenclature(db.Model):
     __tablename__ = 't_nomenclatures'

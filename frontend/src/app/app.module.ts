@@ -8,11 +8,25 @@ import { DataComponent } from './components/data/data.component';
 import { HomeContentComponent } from './components/home-content/home-content.component';
 import { HomeRnfModule } from './home-rnf/home-rnf.module';
 
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { getFrenchPaginatorIntl } from './french-paginator-intl'
+import { MatSortModule } from '@angular/material/sort';
+import { FiltreReservesPipe } from './pipes/filtre-reserves.pipe';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
+import { FormsModule } from '@angular/forms';
+import {MatTooltipModule} from '@angular/material/tooltip'; 
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeContentComponent,
-    DataComponent
+    DataComponent,
+    FiltreReservesPipe
   ],
   imports: [
     BrowserModule,
@@ -30,8 +44,17 @@ import { HomeRnfModule } from './home-rnf/home-rnf.module';
         enable: true
       }
     }),
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    FormsModule,
+    MatTooltipModule
   ],
-  providers: [],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: getFrenchPaginatorIntl()},
+    FiltreReservesPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

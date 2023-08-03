@@ -7,7 +7,7 @@ from schemas.upt import UptSchema
 class ReservesSchema(ma.SQLAlchemyAutoSchema) :
     class Meta :
         model = Reserves
-        # include_relationships = True
+        include_fk = True
     suivis = ma.Nested(lambda: SuiviStSchema, many=False)
     contact = ma.Nested(lambda: ContactStSchema, many=False)
     actions = ma.Nested(lambda: ActionStSchema, many=False)

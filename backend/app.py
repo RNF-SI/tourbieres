@@ -23,3 +23,6 @@ app.register_blueprint(reserves.bp)
 
 from routes import upt
 app.register_blueprint(upt.bp)
+
+from routes import nomenclature
+app.register_blueprint(nomenclature.bp)

@@ -12,6 +12,7 @@ export class FiltreReservesPipe implements PipeTransform {
     //filtre sur les réserves
 
     let data = value.filter(reserve => (
+      args.query_reserve_nom.includes(reserve.id_local) &&
       args.query_enjeux_st.includes(reserve.enjx_st) &&
       reserve.tourbieres.length >= args.query_nb_tourb_min &&
       reserve.tourbieres.length <= args.query_nb_tourb_max
@@ -87,6 +88,8 @@ export class FiltreReservesPipe implements PipeTransform {
     data = pressions(args, data)
     data = pressions_evol(args,data)
     data = etat(args,data)
+    data = genese(args,data)
+    data = typet(args,data)
 
     return data
   }
@@ -448,3 +451,45 @@ function etat(args, data) {
   })
   return data
 }
+
+function genese(args, data) {
+  
+data = data.filter(reserve => {
+  let a = false;
+  for (var tourb of reserve.tourbieres) {      
+    if (
+      (args.query_genese_t.includes('origi_lim') && tourb.origine.origi_lim == true) ||
+      (args.query_genese_t.includes('origi_flu') && tourb.origine.origi_flu == true) ||
+      (args.query_genese_t.includes('origi_omb') && tourb.origine.origi_omb == true) ||
+      (args.query_genese_t.includes('origi_top') && tourb.origine.origi_top == true) ||
+      (args.query_genese_t.includes('origi_sol') && tourb.origine.origi_sol == true) ||
+      (args.query_genese_t.includes('origi_nsp') && tourb.origine.origi_nsp == true)
+    ) {
+      a = true;
+      break;
+    }
+  }
+  return a;
+})
+return data
+}
+
+function typet(args, data) {
+  
+  data = data.filter(reserve => {
+    let a = false;
+    for (var tourb of reserve.tourbieres) {      
+      if (
+        (args.query_type_t.includes('type_hau') && tourb.type.type_hau == true) ||
+        (args.query_type_t.includes('type_bas') && tourb.type.type_bas == true) ||
+        (args.query_type_t.includes('type_tra') && tourb.type.type_tra == true) ||
+        (args.query_type_t.includes('type_autr') && tourb.type.type_autr != null)
+      ) {
+        a = true;
+        break;
+      }
+    }
+    return a;
+  })
+  return data
+  }

@@ -18,6 +18,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { FormsModule } from '@angular/forms';
 import {MatTooltipModule} from '@angular/material/tooltip'; 
 
+import {MatButtonModule} from '@angular/material/button'; 
+
 
 
 
@@ -49,7 +51,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatSortModule,
     NgMultiSelectDropDownModule.forRoot(),
     FormsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatButtonModule
   ],
   providers: [
     { provide: MatPaginatorIntl, useValue: getFrenchPaginatorIntl()},

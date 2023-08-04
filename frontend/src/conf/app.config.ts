@@ -13,9 +13,9 @@ export const AppConfig = {
             "nomFa":"house" as const,
             "lien":""
         },{
-            "nom":"explorer", 
+            "nom":"contacts", 
             "classFa":"fas" as const,
             "nomFa":"magnifying-glass" as const,
-            "lien":"explorer"
+            "lien":"contacts"
         }]
 }

@@ -38,6 +38,7 @@ export class DataComponent {
   showSuivisClimat = false;
   showSuivisPhychi = false;
   showActions = false;
+  showNomReserve = false;
 
   showSuptourbieres = false;
   showActiviteT = false;
@@ -113,10 +114,24 @@ export class DataComponent {
     itemsShowLimit: 3
   };
 
+  reserveSelectSettings: IDropdownSettings = {
+    singleSelection: false,
+    idField: 'id_local',
+    textField: 'nom_site',
+    allowSearchFilter: true,
+    searchPlaceholderText: 'Rechercher une réserve',
+    enableCheckAll: true,
+    selectAllText: 'Tout sélectionner',
+    unSelectAllText: 'Tout déselectionner',
+    itemsShowLimit: 3
+  };
+
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['id_local', 'id_inpn', 'nom_site', 'contact_nom', 'contact_emploi', 'contact_mail'];
 
   //liste d'items pour les réserves
+
+  reserves_nom_selected = []
 
   mode_determination = [{'valeur': 'profondeur', 'label': 'Prodondeur de tourbe'},{'valeur': 'carbone', 'label': 'Pourcentage de carbone'},{'valeur': 'flore', 'label': 'Flore / Habitat'},{'valeur': 'autre', 'label': 'Autre'}];
   mode_determination_selected = this.mode_determination
@@ -223,6 +238,9 @@ export class DataComponent {
         contenu => {
           this.reserves = contenu; 
           this.rns_filtered = this.reserves;
+          console.log(this.reserves);
+          this.reserves_nom_selected = this.reserves;
+          
 
           this.dataSource.data = this.rns_filtered;
           this.dataSource.paginator = this.paginator;
@@ -244,6 +262,7 @@ export class DataComponent {
           this.query_sup_tourb_max= Math.max.apply(Math, this.reserves.map(a => a.tourbieres.map(b => Number(b.superficie)))[0]);
 
           this.filtreslisteReserves = [
+            {'label': 'Nom de la réserve', 'valeur' : 'nom_res'},
             {'label': 'Nombre de tourbières','valeur': 'nb_tourb'}, 
             {'label': 'Mode de détermination','valeur': 'mode_deter'},
             {'label': this.enjeux_st.label,'valeur': 'enjeux_st'},
@@ -376,6 +395,7 @@ export class DataComponent {
     let etat_cons_fonc_filter = this.etat_cons_fonc.map(item => {return item.id_nomenclature});
     let etat_cons_biol_evol_filter = this.etat_cons_biol_evol.map(item => {return item.id_nomenclature});
     let etat_cons_fonc_evol_filter = this.etat_cons_fonc_evol.map(item => {return item.id_nomenclature});
+    let reserves_nom_filter = this.reserves_nom_selected.map(item => {return item.id_local});
 
 
     let args = {
@@ -415,7 +435,8 @@ export class DataComponent {
       "query_etat_cons_biol" : etat_cons_biol_filter,
       "query_etat_cons_fonc" : etat_cons_fonc_filter,
       "query_etat_cons_biol_evol" : etat_cons_biol_evol_filter,
-      "query_etat_cons_fonc_evol" : etat_cons_fonc_evol_filter
+      "query_etat_cons_fonc_evol" : etat_cons_fonc_evol_filter,
+      "query_reserve_nom" : reserves_nom_filter
     }
     
     this.rns_filtered = this.filtreReservesPipe.transform(this.reserves,args)
@@ -426,9 +447,12 @@ export class DataComponent {
     let filtreliste = this.filtreslisteReserves_selected.map(item =>{ return item.valeur});
     let filtrelisteTourbiere = this.filtreslisteTourbieres_selected.map(item => { return item.valeur})
 
+    if (filtreliste.includes('nom_res')) {
+      this.showNomReserve = true
+    } else {
+      this.showNomReserve = false
+    }
     if (filtreliste.includes('nb_tourb')) {
-      console.log('coucou');
-      
       this.showNbtourbieres = true
     } else {
       this.showNbtourbieres = false

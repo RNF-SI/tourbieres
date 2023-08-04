@@ -30,7 +30,7 @@ const routes: Routes = [
         canActivate: [ LazyDialogLoader ]
       },
       {
-        path: 'explorer',
+        path: 'contacts',
         component: DataComponent,
         canActivate: [ AuthGuardService]
       }

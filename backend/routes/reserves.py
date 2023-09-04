@@ -8,7 +8,7 @@ bp = Blueprint('reserves', __name__)
 
 @bp.route('/reserves', methods=['GET'])
 def getReserves():
-    reserves = Reserves.query.all()
+    reserves = Reserves.query.order_by(Reserves.nom_site).all()
     schema = ReservesSchema(many=True)
     Obj = schema.dump(reserves)
 

@@ -410,75 +410,76 @@
         </div>
     </div>
 
-    <div>
-        <table mat-table [dataSource]="dataSource" matSort>
+    
+</div>
+<div [hidden]="loadreserves">
+    <table mat-table [dataSource]="dataSource" matSort>
 
-            <!-- <ng-container matColumnDef="lien">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element"> <a style="color:#2b8a5c" role="button"
-                    routerLink="/reserve/{{element.id_local}}">
-                    <i class="fas fa-eye"></i></a> </td>
-        </ng-container> -->
-            <ng-container matColumnDef="header-row-first-group">
-                <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">
-                    Réserve Naturelle
-                </th>
-            </ng-container>
+        <!-- <ng-container matColumnDef="lien">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element"> <a style="color:#2b8a5c" role="button"
+                routerLink="/reserve/{{element.id_local}}">
+                <i class="fas fa-eye"></i></a> </td>
+    </ng-container> -->
+        <ng-container matColumnDef="header-row-first-group">
+            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">
+                Réserve Naturelle
+            </th>
+        </ng-container>
 
-            <!-- Header row second group -->
-            <ng-container matColumnDef="header-row-second-group">
-                <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Informations contact </th>
-            </ng-container>
+        <!-- Header row second group -->
+        <ng-container matColumnDef="header-row-second-group">
+            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Informations contact </th>
+        </ng-container>
 
-            <ng-container matColumnDef="id_local">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID RNF </th>
-                <td mat-cell *matCellDef="let element"> {{element.id_local}} </td>
-            </ng-container>
+        <ng-container matColumnDef="id_local">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID RNF </th>
+            <td mat-cell *matCellDef="let element"> {{element.id_local}} </td>
+        </ng-container>
 
-            <ng-container matColumnDef="id_inpn">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID INPN </th>
-                <td mat-cell *matCellDef="let element"> {{element.id_inpn}} </td>
-            </ng-container>
+        <ng-container matColumnDef="id_inpn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID INPN </th>
+            <td mat-cell *matCellDef="let element"> {{element.id_inpn}} </td>
+        </ng-container>
 
-            <ng-container matColumnDef="nom_site">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom du site </th>
-                <td mat-cell *matCellDef="let element"> {{element.type_rn}} {{element.jonction_nom}}{{element.nom_site}}
-                </td>
-            </ng-container>
+        <ng-container matColumnDef="nom_site">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom du site </th>
+            <td mat-cell *matCellDef="let element"> {{element.type_rn}} {{element.jonction_nom}}{{element.nom_site}}
+            </td>
+        </ng-container>
 
-            <ng-container matColumnDef="contact_nom">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
-                <td mat-cell *matCellDef="let element"> {{element.contact.contact_prenom | titlecase}}
-                    {{element.contact.contact_nom | titlecase}}</td>
-            </ng-container>
+        <ng-container matColumnDef="contact_nom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
+            <td mat-cell *matCellDef="let element"> {{element.contact.contact_prenom | titlecase}}
+                {{element.contact.contact_nom | titlecase}}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="contact_emploi">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fonction </th>
-                <td mat-cell *matCellDef="let element"> {{element.contact.contact_emploi}}</td>
-            </ng-container>
+        <ng-container matColumnDef="contact_emploi">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fonction </th>
+            <td mat-cell *matCellDef="let element"> {{element.contact.contact_emploi}}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="contact_mail">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Mail </th>
-                <td mat-cell *matCellDef="let element"> {{element.contact.contact_mail}}</td>
-            </ng-container>
+        <ng-container matColumnDef="contact_mail">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Mail </th>
+            <td mat-cell *matCellDef="let element"> {{element.contact.contact_mail}}</td>
+        </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="['header-row-first-group', 'header-row-second-group']"></tr>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-        <mat-paginator #myPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-            aria-label="Select page of periodic elements">
-        </mat-paginator>
+        <tr mat-header-row *matHeaderRowDef="['header-row-first-group', 'header-row-second-group']"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator #myPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+    </mat-paginator>
+    <br>
+    <div style="text-align: right; padding-right: 5%;">
+        <!-- <button *ngIf="isAdminRn" type="button" class="btn black white-text" routerLink="/ajouter-reserve">
+        Ajouter une réserve
+    </button> -->
+        <button mat-raised-button (click)="exportAsXlsx()" style="margin-left: 20px;">
+            <i class="far fa-file-excel"></i> Exporter au format XLSX
+        </button>
         <br>
-        <div style="text-align: right; padding-right: 5%;">
-            <!-- <button *ngIf="isAdminRn" type="button" class="btn black white-text" routerLink="/ajouter-reserve">
-            Ajouter une réserve
-        </button> -->
-            <button mat-raised-button (click)="exportAsXlsx()" style="margin-left: 20px;">
-                <i class="far fa-file-excel"></i> Exporter au format XLSX
-            </button>
-            <br>
-            <br>
-        </div>
+        <br>
     </div>
 </div>

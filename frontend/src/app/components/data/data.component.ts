@@ -133,7 +133,7 @@ export class DataComponent {
 
   reserves_nom_selected = []
 
-  mode_determination = [{'valeur': 'profondeur', 'label': 'Prodondeur de tourbe'},{'valeur': 'carbone', 'label': 'Pourcentage de carbone'},{'valeur': 'flore', 'label': 'Flore / Habitat'},{'valeur': 'autre', 'label': 'Autre'}];
+  mode_determination = [{'valeur': 'profondeur', 'label': 'Prodondeur de tourbe'},{'valeur': 'carbone', 'label': 'Pourcentage de carbone'},{'valeur': 'flore', 'label': 'Flore / Habitat'},{'valeur': 'autre', 'label': 'Autre'}, {'valeur':'aucun', 'label':'Aucun'}, {'valeur':'null', 'label':'Non précisé'}];
   mode_determination_selected = this.mode_determination
 
   filtreslisteReserves = []
@@ -157,14 +157,16 @@ export class DataComponent {
     {'valeur': 'suivi_bio_alg', 'label': 'Algues'},
     {'valeur': 'suivi_bio_adn', 'label': 'ADN environnemental'},
     {'valeur': 'suivi_bio_pat', 'label': 'Espèce patrimoniale'},
-    {'valeur': 'aucun', 'label': 'Aucun suivi biologique'}];
+    {'valeur': 'aucun', 'label': 'Aucun suivi biologique'},
+    {'valeur': 'null', 'label': 'Non précisé'}];
   suivis_biologiques_selected = this.suivis_biologiques
 
   suivis_hydro = [
     {'valeur': 'suivi_hydro_qual', 'label': 'Qualité de l\'eau'},
     {'valeur': 'suivi_hydro_haut', 'label': 'Hauteur d\'eau'},
     {'valeur': 'suivi_hydro_geol', 'label': 'Hydrogéologie'},
-    {'valeur': 'aucun', 'label': 'Aucun suivi hydrologique'}
+    {'valeur': 'aucun', 'label': 'Aucun suivi hydrologique'},
+    {'valeur': 'null', 'label' : 'Non précisé'}
   ]
   suivis_hydro_selected = this.suivis_hydro
 
@@ -174,7 +176,8 @@ export class DataComponent {
     {'valeur' : "suivi_clim_teau", 'label': 'Température de l\'eau'},
     {'valeur' : "suivi_clim_rayo", 'label': 'Rayonnement'},
     {'valeur' : "suivi_clim_vent", 'label': 'Vent'},
-    {'valeur': 'aucun', 'label': 'Aucun suivi climatique'}
+    {'valeur': 'aucun', 'label': 'Aucun suivi climatique'}, 
+    {'valeur': 'null', 'label' : 'Non précisé'}
   ]
   suivis_climat_selected = this.suivis_climat
 
@@ -188,7 +191,8 @@ export class DataComponent {
     {'valeur': "suivi_phychi_oxyd", 'label': 'O2 dissous'},
     {'valeur': "suivi_phychi_carb", 'label': 'Carbone'},
     {'valeur': "suivi_phychi_autr", 'label': 'Autre'},
-    {'valeur': 'aucun', 'label': 'Aucun suivi physico-chimique'}
+    {'valeur': 'aucun', 'label': 'Aucun suivi physico-chimique'},
+    {'valeur': 'null', 'label' : 'Non précisé'}
   ]
   suivis_phychi_selected = this.suivis_phychi
 
@@ -197,7 +201,8 @@ export class DataComponent {
     {'valeur':"action_arche", 'label': 'Archéologique '},
     {'valeur':"action_educ", 'label': 'Education / sensibilisation'},
     {'valeur':"action_amen", 'label': 'Aménagement touristique'},
-    {'valeur': 'aucun', 'label': 'Aucune action'}
+    {'valeur': 'aucun', 'label': 'Aucune action'},
+    {'valeur': 'null', 'label' : 'Non précisé'}
   ]
 
   actions_selected = this.actions
@@ -259,7 +264,17 @@ export class DataComponent {
           });
 
           this.query_nb_tourb_max = Math.max.apply(Math, this.reserves.map(a => a.tourbieres.length));
-          this.query_sup_tourb_max= Math.max.apply(Math, this.reserves.map(a => a.tourbieres.map(b => Number(b.superficie)))[0]);
+          // this.query_sup_tourb_max= Math.max.apply(Math, this.reserves.map(a => a.tourbieres.map(b => Number(b.superficie)))[0]);
+
+          for (const element of this.reserves) {
+            // Utilisation d'une boucle for pour parcourir les tourbières
+            for (const tourbiere of element.tourbieres) {
+              const superficie = tourbiere.superficie || 0; // Si superficie est null, on utilise 0
+              if (superficie > this.query_sup_tourb_max) {
+                this.query_sup_tourb_max = superficie;
+              }
+            }
+          }
 
           this.filtreslisteReserves = [
             {'label': 'Nom de la réserve', 'valeur' : 'nom_res'},
@@ -296,9 +311,8 @@ export class DataComponent {
     this.dataService.nomenclatureByMnemo('enjeux_st').subscribe(
       contenu => {
         this.enjeux_st = contenu;
+        this.enjeux_st.items.push({'label': 'Non précisé', 'id_nomenclature' : 'null'})
         this.enjeux_st_selected = this.enjeux_st.items;     
-        console.log();
-           
       }
     )
     this.dataService.nomenclatureByMnemo('fonc_source_eau').subscribe(
@@ -439,7 +453,10 @@ export class DataComponent {
       "query_reserve_nom" : reserves_nom_filter
     }
     
-    this.rns_filtered = this.filtreReservesPipe.transform(this.reserves,args)
+    let filtreliste = this.filtreslisteReserves_selected.map(item =>{ return item.valeur});
+    let filtrelisteTourbiere = this.filtreslisteTourbieres_selected.map(item => { return item.valeur})
+
+    this.rns_filtered = this.filtreReservesPipe.transform(this.reserves,args, filtreliste, filtrelisteTourbiere)
     this.dataSource.data = this.rns_filtered;
   }
 

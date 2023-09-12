@@ -484,6 +484,7 @@ function conservation_biologique(args, data) {
     }
     return a;
   })
+  return data
 }
 function conservation_fonctionnel(args, data) {
 
